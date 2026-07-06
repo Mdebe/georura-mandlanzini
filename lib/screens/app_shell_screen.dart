@@ -19,18 +19,18 @@ class AppShellScreen extends StatefulWidget {
 }
 
 class _AppShellScreenState extends State<AppShellScreen> {
-  int _currentIndex = 0;
+  int _currentIndex = 0; // 0..4: Dashboard, Sites, Map, Reports, Profile
   int _refreshToken = 0;
 
   String _titleForIndex(int index) {
     switch (index) {
       case 1:
         return 'Sites';
-      case 3:
+      case 2:
         return 'Map';
-      case 4:
+      case 3:
         return 'Reports';
-      case 5:
+      case 4:
         return 'Profile';
       default:
         return 'Dashboard';
@@ -41,11 +41,11 @@ class _AppShellScreenState extends State<AppShellScreen> {
     switch (index) {
       case 1:
         return 'Search and review saved sites';
-      case 3:
+      case 2:
         return 'Offline area overview';
-      case 4:
+      case 3:
         return 'Local summaries and counts';
-      case 5:
+      case 4:
         return 'Enumerator profile';
       default:
         return 'Offline-first census app';
@@ -58,24 +58,21 @@ class _AppShellScreenState extends State<AppShellScreen> {
       MaterialPageRoute(builder: (_) => const RegisterSiteScreen()),
     );
 
-    if (saved == true) {
+    if (saved == true && mounted) {
       setState(() {
         _refreshToken += 1;
         _currentIndex = 0; // Jump back to dashboard
       });
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Site saved locally.')),
-        );
-      }
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Site saved locally.')));
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    // Watch auth so we rebuild when user logs in/out
     final auth = context.watch<AuthProvider>();
-    
+
     return Scaffold(
       appBar: RuralMapAppBar(
         title: _titleForIndex(_currentIndex),
@@ -87,28 +84,25 @@ class _AppShellScreenState extends State<AppShellScreen> {
           ),
         ],
       ),
-      body: IndexedStack(index: _currentIndex, children: [
-        DashboardScreen(
-          refreshToken: _refreshToken,
-          currentUserEmail: auth.currentUser?.email, // Key fix: pass live email
-          onNavigate: (index) => setState(() => _currentIndex = index),
-          onOpenRegister: _openRegister,
-        ),
-        const SiteListScreen(),
-        const SizedBox.shrink(), // Placeholder for FAB
-        MapScreen(refreshToken: _refreshToken),
-        const ReportsScreen(),
-        const ProfileScreen(),
-      ]),
+      body: IndexedStack(
+        index: _currentIndex,
+        children: [
+          DashboardScreen(
+            // 0
+            refreshToken: _refreshToken,
+            currentUserEmail: auth.currentUser?.email,
+            onNavigate: (index) => setState(() => _currentIndex = index),
+            onOpenRegister: _openRegister,
+          ),
+          const SiteListScreen(), // 1
+          MapScreen(refreshToken: _refreshToken), // 2
+          const ReportsScreen(), // 3
+          const ProfileScreen(), // 4
+        ],
+      ),
       bottomNavigationBar: AppBottomNav(
         currentIndex: _currentIndex,
-        onTap: (index) {
-          if (index == 2) {
-            _openRegister();
-            return;
-          }
-          setState(() => _currentIndex = index);
-        },
+        onTap: (index) => setState(() => _currentIndex = index),
         onRegisterTap: _openRegister,
       ),
     );

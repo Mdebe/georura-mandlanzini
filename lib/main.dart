@@ -11,16 +11,21 @@ import 'theme/app_theme.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
-  // Initialize Firebase
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-  
-  // Ensure DB is ready before app starts
-  await DBHelper.instance.database;
-  await DBHelper.instance.seedIfEmpty();
-  
+
+  try {
+    // Initialize Firebase
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+
+    // Ensure DB is ready before app starts
+    await DBHelper.instance.database;
+    await DBHelper.instance.seedIfEmpty();
+  } catch (e, stack) {
+    debugPrint('Startup error: $e');
+    debugPrintStack(stackTrace: stack);
+  }
+
   runApp(const GeoRuraApp());
 }
 
@@ -59,9 +64,9 @@ class AuthGate extends StatelessWidget {
               Text(
                 'GeoRura',
                 style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                      fontWeight: FontWeight.w800,
-                      color: AppColors.primary,
-                    ),
+                  fontWeight: FontWeight.w800,
+                  color: AppColors.primary,
+                ),
               ),
             ],
           ),
