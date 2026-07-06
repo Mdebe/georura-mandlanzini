@@ -1,0 +1,85 @@
+name: ruralmap
+description: GeoRura Mandlazini Demonstration Platform
+publish_to: "none"
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=3.12.0 <4.0.0"
+  flutter: ">=3.44.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.8
+
+  # Local Database
+  sqflite: ^2.4.2
+  path: ^1.9.1
+  path_provider: ^2.1.5
+
+  # Device Information
+  package_info_plus: ^8.3.1
+  device_info_plus: ^11.5.0
+
+  # Connectivity
+  connectivity_plus: ^7.0.0
+
+  # Permissions
+  permission_handler: ^12.0.1
+
+  # GPS & Maps
+  geolocator: ^14.0.2
+  geocoding: ^4.0.0
+  flutter_map: ^8.2.2
+  latlong2: ^0.9.1
+
+  # Camera
+  image_picker: ^1.2.0
+
+  # Utilities
+  intl: ^0.20.2
+  url_launcher: ^6.3.2
+  shared_preferences: ^2.5.3
+  qr_flutter: ^4.1.0
+  excel: ^4.0.6
+  csv: ^6.0.0
+  share_plus: ^12.0.0
+  crypto: ^3.0.6
+
+  # State Management
+  provider: ^6.1.5
+
+  # Firebase
+  firebase_core: ^4.1.0
+  firebase_auth: ^6.1.0
+
+  # Biometrics
+  local_auth: ^2.3.0
+
+  
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^6.0.0
+  flutter_launcher_icons: ^0.14.4
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/icons/
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+
+  image_path: assets/icons/app_icon.png
+
+  adaptive_icon_background: "#FFFFFF"
+  adaptive_icon_foreground: assets/icons/app_icon.png
+
+  remove_alpha_ios: true
+
+  min_sdk_android: 23
